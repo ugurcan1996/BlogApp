@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "BlogAssignTag";
+}
+
+@model Blog
+
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title"><b>Başlık: </b>@Model.Tittle</h4>
+        <p class="card-text"><b>Kategori:</b> @Model.BlogCategory.CategoryName</p>
+
+        <b>Etiketler</b>
+        <ul>
+            @foreach (var item in Model?.BlogTags)
+            {
+                <li>@item.TagName</li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+<form method="post" asp-controller="Blog" asp-action="BlogAssignTag">
+
+    @if (ViewBag.message != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.message
+        </div>
+    }
+
+    <input type="hidden" name="blogId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Etiket seçiniz :</label>
+
+        <select name="tagsId" class="form-select" multiple>
+
+            @foreach (var item in (List<Tag>)ViewBag.Tags)
+            {
+                @if (Model.BlogTags.Any(x => x.Id == item.Id))
+                {
+                    <option disabled value="@item.Id">@item.TagName</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.TagName</option>
+                }
+
+                
+            }
+
+        </select>
+    </div>
+    <button class="btn btn-success" type="submit">Ekle</button>
+</form>
